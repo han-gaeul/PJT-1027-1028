@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render
-from .forms import CustomCreationForm
+from .forms import CustomChangeForm, CustomCreationForm
 from .models import Profile
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -68,3 +69,17 @@ def detail(request, pk):
         'user' : user
     }
     return render(request, 'accounts:detail.html', context)
+
+# 회원 정보 수정
+def update(request):
+    if request.method == 'POST':
+        form = CustomChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile')
+    else:
+        form = CustomChangeForm(instance=request.user)
+    context = {
+        'form' : form
+    }
+    return render(request, 'accounts/update.html', context)
