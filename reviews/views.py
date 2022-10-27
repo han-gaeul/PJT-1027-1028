@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # 글 목록
 def index(request):
-    reviews = Review.objects.annotate(Count('commnet')).order_by('-pk')
+    reviews = Review.objects.order_by('-pk')
     context = {
         'reviews' : reviews
     }
@@ -17,7 +17,7 @@ def index(request):
 
 # 글 조회
 def detail(request, pk):
-    reviews = Review.objects.select_related('user').order_by('-pk')
+    reviews = Review.objects.get(pk=pk)
     context = {
         'reviews' : reviews,
     }
@@ -37,5 +37,20 @@ def create(request):
         review_form = ReviewForm()
     context = {
         'review_form'  : review_form
+    }
+    return render(request, 'reviews/form.html', context)
+
+# 글 수정
+def update(request, pk):
+    review = Review.objects.get(pk=pk)
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST, request.FILES, instance=review)
+        if review_form.is_valid():
+            review_form.save()
+            return redirect('reviews:detail', review.pk)
+    else:
+        review_form = ReviewForm(instance=review)
+    context = {
+        'review_form' : review_form
     }
     return render(request, 'reviews/form.html', context)
