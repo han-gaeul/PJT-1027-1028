@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from .forms import CustomCreationForm
 from .models import Profile
 from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
@@ -39,3 +40,8 @@ def login(request):
         'form' : form
     }
     return render(request, 'accounts/login.html', context)
+
+# 로그아웃
+def logout(request):
+    auth_logout(request)
+    return redirect('reviews:index')
