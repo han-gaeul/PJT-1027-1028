@@ -27,7 +27,7 @@ class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='')
     like_users = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='like_reviews')
 
-class Comments(models.Model):
-    reviews = models.ForeignKey(Review, on_delete=models.CASCADE)
+class Comment(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(max_length=1000)
