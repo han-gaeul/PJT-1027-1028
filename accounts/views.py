@@ -3,7 +3,7 @@ from .forms import CustomCreationForm
 from .models import Profile
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 
 # Create your views here.
 
@@ -45,3 +45,17 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('reviews:index')
+
+# 비밀번호 변경
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('reviews:index')
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {
+        'form' : form
+    }
+    return render(request, 'accounts/change_password.html', context)
