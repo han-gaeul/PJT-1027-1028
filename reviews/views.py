@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 
-from reviews.forms import ReviewForm
+from reviews.forms import CommentForm, ReviewForm
 from .models import Review, Comment
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -65,3 +65,14 @@ def delete(request, pk):
         'review' : review
     }
     return render(request, 'reviews/index.html', context)
+
+# 댓글 작성
+def comment_create(request, pk):
+    review = Review.objects.get(pk=pk)
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.review = review
+        comment.user = request.user
+        comment.save()
+    return redirect('reviews:detail', pk)
