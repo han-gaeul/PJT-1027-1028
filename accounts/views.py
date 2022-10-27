@@ -3,6 +3,7 @@ from .forms import CustomCreationForm
 from .models import Profile
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 
 # Create your views here.
@@ -59,3 +60,11 @@ def change_password(request):
         'form' : form
     }
     return render(request, 'accounts/change_password.html', context)
+
+# 다른 회원의 정보
+def detail(request, pk):
+    user = get_user_model()
+    context = {
+        'user' : user
+    }
+    return render(request, 'accounts:detail.html', context)

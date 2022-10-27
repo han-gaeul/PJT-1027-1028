@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  <h1>{{ user.username }}</h1>
+  <p>작성한 게시글 :
+    {{ user.review_set.count }}개</p>
+
+  <div>
+    {% for review in user.review_set.all %}
+      <div class="row">
+        <div class="col-6">
+          {% if review.image %}
+            <a href="{% url 'review:detail' review.pk %}">
+              <p class="thumbimg">
+                <img src="{{ review.thumbnail.url }}" alt="{{ review.image }}">
+              </p>
+              <p>{{ review.title }}</p>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="mt-5">
+    <p>작성한 댓글 :
+      {{ user.comment_set.count }}개</p>
+    {% for comment in user.comment_set.all %}
+      <p>{{ forloop.counter }}
+        <a href="{% url 'review:detail' comment.review_id %}">{{ comment.content }}</a>
+      </p>
+    {% endfor %}
+  </div>
+  <button class="btn btn-primary" type="submit" onclick="location.href='{% url 'reviews:index' %}">돌아가기</button>
+{% endblock content %}
