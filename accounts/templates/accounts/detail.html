@@ -10,7 +10,7 @@
     {% for review in user.review_set.all %}
       <div class="row">
         <div class="col-6">
-          {% if review.image %}
+          {% if review.thumbnail %}
             <a href="{% url 'review:detail' review.pk %}">
               <p class="thumbimg">
                 <img src="{{ review.thumbnail.url }}" alt="{{ review.image }}">
