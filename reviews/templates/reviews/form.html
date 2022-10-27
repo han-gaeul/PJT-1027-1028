@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+  {% if request.resolver_match.url_name == 'create' %}
+    <h1 class="my-4 text-center">작성</h1>
+  {% else %}
+    <h1 class="my-4 text-center">수정</h1>
+  {% endif %}
+
+  <form action="" method="POST" envtype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form article_form %}
+    <button class="btn btn-primary" type="submit">등록</button>
+  </form>
+{% endblock content %}
