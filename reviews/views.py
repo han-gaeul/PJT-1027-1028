@@ -76,3 +76,10 @@ def comment_create(request, pk):
         comment.user = request.user
         comment.save()
     return redirect('reviews:detail', pk)
+
+# 댓글 삭제
+def comment_delete(request, pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    if request.user == comment.user:
+        comment.delete()
+    return redirect('reviews:detail', pk)
