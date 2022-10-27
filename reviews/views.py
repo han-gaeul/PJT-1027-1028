@@ -83,3 +83,12 @@ def comment_delete(request, pk, comment_pk):
     if request.user == comment.user:
         comment.delete()
     return redirect('reviews:detail', pk)
+
+# 좋아요
+def like(request, pk):
+    review = Review.objects.get(pk=pk)
+    if request.user in review.like_users.all():
+        review.like_users.remove(request.user)
+    else:
+        review.like_users.add(request.user)
+    return redirect('reviewsLdetail', pk)
