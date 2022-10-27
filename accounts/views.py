@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .forms import CustomChangeForm, CustomCreationForm
+from .forms import CustomChangeForm, CustomCreationForm, ProfileForm
 from .models import Profile
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
@@ -62,7 +62,7 @@ def change_password(request):
     }
     return render(request, 'accounts/change_password.html', context)
 
-# 다른 회원의 정보
+# 회원 정보
 def detail(request, pk):
     user = get_user_model()
     context = {
@@ -96,3 +96,20 @@ def profile(request):
         'profile' : profile,
     }
     return render(request, 'accounts/profile.html', context)
+
+# 프로필 수정
+@login_required
+def profile_update(request):
+    user = get_user_model().objects.get(pk=request.user.pk)
+    current_user = user.profile_ser.all()[0]
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=current_user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile')
+    else:
+        form = ProfileForm(instance=current_user)
+    context = {
+        'form' :form
+    }
+    return render(request, 'accounts/profile_update.html', context)
