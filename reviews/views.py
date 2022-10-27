@@ -12,3 +12,11 @@ def index(request):
         'reviews' : reviews
     }
     return render(request, 'reviews/index.html', context)
+
+# 글 조회
+def detail(request, pk):
+    reviews = Review.objects.select_related('user').order_by('-pk')
+    context = {
+        'reviews' : reviews,
+    }
+    return render(request, 'reviews/detail.html', context)
