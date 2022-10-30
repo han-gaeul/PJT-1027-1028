@@ -18,8 +18,11 @@ def index(request):
 # 글 조회
 def detail(request, pk):
     reviews = Review.objects.get(pk=pk)
+    comment_form = CommentForm()
     context = {
         'reviews' : reviews,
+        'comments' : reviews.comment_set.all(),
+        'comment_form' : comment_form,
     }
     return render(request, 'reviews/detail.html', context)
 
@@ -67,6 +70,7 @@ def delete(request, pk):
     return render(request, 'reviews/index.html', context)
 
 # 댓글 작성
+@login_required
 def comment_create(request, pk):
     review = Review.objects.get(pk=pk)
     comment_form = CommentForm(request.POST)
