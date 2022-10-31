@@ -101,7 +101,7 @@ def profile(request):
 @login_required
 def profile_update(request):
     user = get_user_model().objects.get(pk=request.user.pk)
-    current_user = user.profile_ser.all()[0]
+    current_user = user.profile_set.all()[0]
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=current_user)
         if form.is_valid():
